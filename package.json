@@ -1,0 +1,23 @@
+{
+  "name": "projectaws",
+  "version": "1.0.0",
+  "description": "",
+  "scripts": {
+    "start": "IS_LOCAL=true node ./src/local.js ",
+    "dev": "IS_LOCAL=true nodemon ./src/local.js ",
+    "offline": "sls offline start"
+  },
+  "dependencies": {
+    "@aws-sdk/client-dynamodb": "^3.316.0",
+    "@aws-sdk/lib-dynamodb": "^3.316.0",
+    "dotenv": "^16.0.3",
+    "eslint-config-trybe-backend": "^2.1.0",
+    "express": "^4.18.2",
+    "serverless-http": "^3.1.1",
+    "uuid": "^9.0.0"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.22",
+    "serverless-offline": "^12.0.4"
+  }
+}

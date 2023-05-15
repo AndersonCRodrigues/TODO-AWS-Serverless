@@ -1,0 +1,61 @@
+service: projectaws
+frameworkVersion: '3'
+
+custom:
+  tableName: 'users-table-${sls:stage}' # nome da tabela
+  todoName: 'todo-table-${sls:stage}'
+
+provider:
+  name: aws
+  runtime: nodejs16.x
+  stage: ${opt:stage, 'dev'} # sobrenome da tabela (estágio de desenvolvimento)
+  iam:
+    role:
+      statements:
+        - Effect: Allow
+          Action:
+            - dynamodb:Query
+            - dynamodb:Scan
+            - dynamodb:GetItem
+            - dynamodb:PutItem
+            - dynamodb:UpdateItem
+            - dynamodb:DeleteItem
+          Resource:
+            - Fn::GetAtt: [ UsersTable, TodoTable, Arn ]
+  environment:
+    USERS_TABLE: ${self:custom.tableName} # nome da tabela que passo por variável
+    TODO_TABLE: ${self:custom.todoName}
+
+functions:
+  api:
+    handler: ./src/index.handler # caminho do export do servidor
+    events:
+      - httpApi: '*'
+
+resources:
+  Resources:
+    UsersTable:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        AttributeDefinitions:
+          - AttributeName: taskId # pk
+            AttributeType: S # tipo string
+        KeySchema:
+          - AttributeName: taskId # sk schema key
+            KeyType: HASH # codificada
+        BillingMode: PAY_PER_REQUEST
+        TableName: ${self:custom.tableName} # onde cria a minha pk
+    TodoTable:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        AttributeDefinitions:
+          - AttributeName: taskId # pk
+          AttributeType: S # tipo string
+        KeySchema:
+          - AttributeName: taskId # sk schema key
+          KeyType: HASH # codificada
+        BillingMode: PAY_PER_REQUEST
+        TableName: ${self:custom.todoName} # onde cria a minha pk
+
+plugins:
+  - serverless-offline

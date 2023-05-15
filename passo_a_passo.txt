@@ -1,0 +1,8 @@
+1. npm i -g aws serverless
+2. aws configure # colocar chave e senha do aws
+3. sls => http API express dynamoDB # iniciar projeto com CLI
+4. npm i -D serverless-offline # rodar localmente
+5. instalar o localstack
+6. localstack start # rodar aws local
+7. sls deploy # para deploy da API
+8. sls remove # derrubar o serviço (para de cobrar)
